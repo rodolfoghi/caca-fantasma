@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Caça fantasmas</title>
+    <style>
+        #palco {
+            /* Nosso palco ocupará 80% da largura e 70% da altura da tela. */
+            width: 80%;
+            height: 80vh;
+            /* Define a imagem a ser utilizada como pano de fundo. */
+            background-image: url('floresta.png');
+            /* A imagem  deve cobrir a div inteira, tanto em altura como em largura. */
+            background-size: cover;
+            background-repeat: no-repeat;
+            /* Margens superior e inferior zero e direita e esquerda automática, para que fique centralizado. */
+            margin: 0 auto;
+        }
+
+        #fantasma1 {
+            position: relative;
+        }
+
+        #placar {
+            /* Para que seja possível definir tamanho e margin */
+            display: block;
+            /* Para que com margin left/right auto fique alinhado a esquerda com o palco */
+            width: 80%; 
+            /* Para "centralizar" horizontalmente */
+            margin: 0 auto;
+            font-size: 1.5em;
+            padding: .2em;
+        }
+
+        #placar span {
+            display: inline-block;
+            box-sizing: border-box;
+            width: 50px;
+            text-align: center;
+            color: white;
+            background-color: orange;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <label id="placar">Fantasmas capturados: <span>0</span></label>
+    <div id="palco">
+        <img src="fantasma1.svg" alt="Fantasma número 1" id="fantasma1" onclick="capturar()">
+    </div>
+
+    <script>
+        /** 
+         * Pega a imagem com id fantasma1 e salva em uma variável 
+         * para que seja possível manipularmos com JavaScript. 
+         */
+        const $fantasma1 = document.getElementById("fantasma1");
+
+        // Constante referente ao palco
+        const $palco = document.getElementById('palco');
+
+        const $placar = document.getElementById('placar');
+        let fantasmasCapturados = 0;
+
+        function capturar() {
+            esconda();
+            fantasmasCapturados++;
+            $placar.innerHTML = `Fantasmas capturados: <span>${fantasmasCapturados}</span>`;
+        }
+
+        // https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+        function getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min)) + min;
+        }
+
+        // Esconde a imagem fantasma1.
+        function esconda() {
+            $fantasma1.style.top = getRandomInt(0, $palco.clientHeight - $fantasma1.clientHeight) + "px";
+            $fantasma1.style.left = getRandomInt(0, $palco.clientWidth - $fantasma1.clientWidth) + "px";
+            $fantasma1.style.display = "none";
+        }
+
+        // Mostra a imagem fantasma1.
+        function mostre() {
+            $fantasma1.style.display = "";
+        }
+
+        // Função principal do jogo.
+        function jogo() {
+            if ($fantasma1.style.display == "none") {
+                mostre();
+            } else {
+                esconda();
+            }
+        }
+
+        // Define o intervalo de repetição em milissegundos.
+        setInterval(jogo, 1000);
+    </script>
+</body>
+
+</html>
