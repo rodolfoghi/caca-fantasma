@@ -24,17 +24,18 @@
             position: relative;
         }
 
-        #placar {
-            /* Para que seja possível definir tamanho e margin */
-            display: block;
+        .display {
+            display: flex;
+            justify-content: space-between;
             /* Para que com margin left/right auto fique alinhado a esquerda com o palco */
-            width: 80%; 
+            width: 80%;
             /* Para "centralizar" horizontalmente */
             margin: 0 auto;
             font-size: 1.5em;
             padding: .2em;
         }
 
+        #cronometro span,
         #placar span {
             display: inline-block;
             box-sizing: border-box;
@@ -48,7 +49,14 @@
 </head>
 
 <body>
-    <label id="placar">Fantasmas capturados: <span>0</span></label>
+    <section class="display">
+        <label id="placar">Fantasmas capturados:
+            <span>0</span>
+        </label>
+        <label id="cronometro">Tempo:
+            <span>10</span>
+        </label>
+    </section>
     <div id="palco">
         <img src="fantasma1.svg" alt="Fantasma número 1" id="fantasma1" onclick="capturar()">
     </div>
@@ -65,6 +73,9 @@
 
         const $placar = document.getElementById('placar');
         let fantasmasCapturados = 0;
+
+        const $cronometro = document.getElementById('cronometro');
+        let tempoSegundos = 10;
 
         function capturar() {
             esconda();
@@ -98,10 +109,22 @@
             } else {
                 esconda();
             }
+
+            atualizaTempo();
+
+            if (tempoSegundos <= 0) {
+                clearInterval(refreshIntervalId);
+            }
         }
 
+
         // Define o intervalo de repetição em milissegundos.
-        setInterval(jogo, 1000);
+        let refreshIntervalId = setInterval(jogo, 1000);
+
+        function atualizaTempo() {
+            tempoSegundos--;
+            $cronometro.innerHTML = `Tempo: <span>${tempoSegundos}</span>`;
+        }
     </script>
 </body>
 
